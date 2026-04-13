@@ -1,381 +1,328 @@
-# ANDL 2.0 Frequently Asked Questions (FAQ)
-
-**Last Updated**: April 11, 2026  
-**Version**: 2.0.0
-
----
+# Frequently Asked Questions (FAQ)
 
 ## General Questions
 
-### Q1: What is ANDL?
+### What is ANDL?
 
-**A**: ANDL (AI Native Description Language) is a communication protocol designed specifically for AI systems. Unlike human languages, ANDL transmits semantics directly in vectorized form, enabling:
-- Nanosecond-level communication latency
-- Infinite context compression
-- Unified multimodal encoding
-- Native AI-to-AI communication
+ANDL (AI Native Data Link) is a communication protocol designed specifically for AI-to-AI communication. It uses semantic vectors instead of text, achieving 10-100x efficiency improvements over JSON.
 
-### Q2: How is ANDL different from existing protocols?
+### What's new in ANDL 2.0.1?
 
-| Feature | HTTP/REST | gRPC | ANDL 2.0 |
-|---------|-----------|------|----------|
-| Data format | JSON/Protobuf | Protobuf | Native vectors |
-| Latency | ~100ms | ~10ms | ~1μs |
-| Context | Stateless | Limited | Infinite |
-| AI-optimized | No | No | Yes |
-| Multimodal | Separate | Separate | Unified |
+ANDL 2.0.1 introduces **NeuralConsensus**, a distributed tamper-proof mechanism that:
+- Detects AI-powered semantic attacks with 99.9% accuracy
+- Tolerates up to 1/3 of network nodes failing
+- Maintains sub-50ms verification latency
 
-### Q3: Who should use ANDL?
+### Who created ANDL?
 
-**A**: ANDL is designed for:
-- AI model providers (OpenAI, Anthropic, etc.)
-- AI infrastructure companies (Hugging Face, Replicate)
-- Enterprises with multi-AI systems
-- Researchers studying AI communication
+ANDL was created by 袁嘉林 (JIALIN YUAN) and the ANDL Project Contributors. See [CONTRIBUTORS.md](CONTRIBUTORS.md) for the full list.
 
-### Q4: Is ANDL a replacement for human languages?
+### Is ANDL free to use?
 
-**A**: No. ANDL is designed for AI-to-AI communication. Humans interact with ANDL through translation layers that convert natural language to/from ANDL's vectorized format.
+Yes! ANDL is licensed under Apache License 2.0, which means:
+- ✅ Free for commercial use
+- ✅ Free for personal use
+- ✅ Can modify and distribute
+- ✅ Patent protection included
 
 ---
 
 ## Technical Questions
 
-### Q5: What programming languages are supported?
+### How does NeuralConsensus work?
 
-**A**: Currently supported:
-- **Python** (reference implementation) ✅
-- **C++** (in development)
-- **Rust** (planned)
-- **Go** (planned)
+NeuralConsensus is inspired by human brain's distributed memory:
 
-Community contributions welcome for other languages.
+1. **Vector Sharding**: Split semantic vector into 4 parts
+2. **Distributed Storage**: Store each part on 3+ nodes
+3. **Multi-Path Verification**: Check through temporal, semantic, and causal paths
+4. **Consensus Decision**: Require 67% agreement for validation
 
-### Q6: Do I need a GPU to use ANDL?
+### What's the difference between ANDL 2.0 and 2.0.1?
 
-**A**: No. ANDL works on CPU-only systems using our Virtual GPU Memory Manager, which simulates GPU memory layout in host RAM. However, GPU acceleration provides optimal performance.
+| Feature | 2.0 | 2.0.1 |
+|---------|-----|-------|
+| Vector Communication | ✅ | ✅ |
+| Tamper Detection | ❌ | ✅ |
+| Fault Tolerance | ❌ | ✅ |
+| E2EE Encryption | ❌ | ✅ |
+| Latency | <1ms | <50ms |
 
-```python
-# ANDL automatically selects best transport
-layer = AdaptivePhysicalLayer()
-transport = layer.select_transport({"has_gpu": False})  # Works without GPU
-```
+### Can ANDL 2.0.1 work with 2.0 nodes?
 
-### Q7: What is the minimum hardware requirement?
+Yes! ANDL 2.0.1 is backward compatible:
+- 2.0.1 → 2.0: Uses 2.0 protocol
+- 2.0 → 2.0.1: Falls back to 2.0 protocol
+- 2.0.1 → 2.0.1: Full 2.0.1 features
 
-**A**: 
-- **Minimum**: 4 CPU cores, 8GB RAM
-- **Recommended**: 8+ CPU cores, 32GB RAM, GPU with 16GB VRAM
-- **Optimal**: Multi-GPU setup with RDMA networking
+### What are semantic vectors?
 
-### Q8: How does vector compression work?
+Semantic vectors are high-dimensional numerical representations of meaning:
+- **Text**: "Transfer money" → [0.23, -0.87, 0.56, ...] (1024 numbers)
+- **Images**: Can be encoded similarly
+- **Audio**: Also encodable
 
-**A**: ANDL uses a 4-stage compression pipeline:
-1. **Scalar quantization**: FP32 → INT8
-2. **Sparsification**: Keep top-K important dimensions
-3. **Delta encoding**: Store difference from context
-4. **Entropy encoding**: Further compress using statistical patterns
+Unlike text, vectors capture nuance and relationships.
 
-Typical compression ratio: **10-50x**
+### How secure is ANDL 2.0.1?
 
-### Q9: What is semantic graph structure?
-
-**A**: Unlike linear text (A→B→C→D), ANDL uses graph structures:
-```
-    A ──┬── B
-        │
-        └── C ── D
-```
-This allows:
-- Parallel processing of branches
-- Explicit relationship types
-- Cyclic/recursive structures
-- Efficient traversal algorithms
-
-### Q10: How does multi-AI consensus work?
-
-**A**: Multiple AIs propose vectors, then:
-1. Weighted aggregation of proposals
-2. Outlier detection (identify malicious/divergent proposals)
-3. Iterative refinement until convergence
-4. Byzantine fault tolerance (tolerates up to 1/3 faulty nodes)
-
----
-
-## Security Questions
-
-### Q11: Is ANDL secure?
-
-**A**: Yes. ANDL implements:
-- **TLS 1.3** for transport encryption
-- **Ed25519** for message signing
-- **AES-256-GCM** for data at rest
-- **Zero-trust architecture**
-- **Audit logging** for compliance
+Very secure against AI attacks:
+- **Attack Detection**: 99.9% accuracy
+- **Byzantine Fault Tolerance**: Tolerates 1/3 malicious nodes
+- **E2EE Encryption**: End-to-end encryption
+- **Zero-Knowledge Ready**: Can integrate ZK proofs
 
 See [Security Whitepaper](security-whitepaper.md) for details.
 
-### Q12: Can messages be intercepted?
-
-**A**: All ANDL messages are encrypted end-to-end using TLS 1.3. Even if intercepted, the content is unreadable without the private keys.
-
-### Q13: What about quantum computing threats?
-
-**A**: ANDL uses post-quantum cryptographic algorithms where available. We are actively monitoring NIST post-quantum cryptography standards and will migrate when appropriate.
-
-### Q14: How do you prevent malicious AI proposals?
-
-**A**: The consensus mechanism includes:
-- Statistical outlier detection
-- Cosine similarity analysis
-- Reputation systems
-- Slashing conditions for bad actors
-
 ---
 
-## Licensing Questions
+## Usage Questions
 
-### Q15: Is ANDL open source?
+### How do I get started?
 
-**A**: ANDL uses a **dual-licensing model**:
-- **L1 Protocol Layer**: Apache 2.0 (fully open source)
-- **L2 Implementation**: Apache 2.0 (community) / Commercial (enterprise)
-- **L3 Service Layer**: Commercial license
+```bash
+# Install
+pip install andl2
 
-### Q16: Can I use ANDL for free?
+# Basic usage
+from andl import NeuralConsensus
 
-**A**: Yes, for:
-- Personal projects
-- Non-commercial use
-- Small teams (<10 people)
-- Companies with annual revenue <$1M
-
-See [License](../licenses/ANDL-LICENSE.md) for details.
-
-### Q17: What does the enterprise license include?
-
-**A**: Enterprise features:
-- Advanced security modules
-- Multi-region deployment
-- Dedicated support
-- 99.99% SLA guarantee
-- Custom integrations
-
-Contact jialine0426@hotmail.com for pricing.
-
----
-
-## Integration Questions
-
-### Q18: Can I use ANDL with existing AI models?
-
-**A**: Yes. ANDL provides adapters for popular frameworks:
-- PyTorch
-- TensorFlow
-- JAX
-- ONNX
-
-```python
-# Wrap existing model
-from andl.adapters import PyTorchAdapter
-
-model = load_your_pytorch_model()
-andl_model = PyTorchAdapter(model)
+consensus = NeuralConsensus()
+vector = encoder.encode("Hello, AI!")
+result = await consensus.store(vector, "msg_001")
 ```
 
-### Q19: How do I migrate from REST API to ANDL?
+See [Quick Start Guide](quickstart.md) for full tutorial.
 
-**A**: Migration path:
-1. Install ANDL SDK
-2. Use translation layer for gradual migration
-3. Replace REST calls with ANDL messages
-4. Optimize with native vector encoding
+### What are the system requirements?
 
-We provide migration tools and consulting services.
+**Minimum**:
+- Python 3.10+
+- 4GB RAM
+- 10GB disk
 
-### Q20: Does ANDL work with cloud providers?
+**Recommended**:
+- Python 3.11+
+- 16GB RAM
+- 100GB SSD
+- GPU (optional, for encoding)
 
-**A**: Yes, ANDL is cloud-agnostic:
-- AWS (EC2, ECS, EKS)
-- Google Cloud (GCE, GKE)
-- Azure (VMs, AKS)
-- On-premises
-- Hybrid setups
+### Can I use ANDL with my existing AI system?
+
+Yes! ANDL provides:
+- Python SDK
+- REST API
+- WebSocket support
+- gRPC (coming soon)
+
+### How many nodes do I need?
+
+| Use Case | Nodes | Fault Tolerance |
+|----------|-------|-----------------|
+| Development | 3 | 1 node |
+| Production | 5 | 1 node |
+| High Security | 7+ | 2+ nodes |
+
+### What's the performance overhead?
+
+Compared to ANDL 2.0:
+- **Latency**: +20ms (for verification)
+- **Bandwidth**: +15% (for redundancy)
+- **Storage**: +200% (3x redundancy)
+
+Security benefits outweigh costs for sensitive applications.
 
 ---
 
-## Performance Questions
+## Comparison Questions
 
-### Q21: What latency can I expect?
+### ANDL vs JSON?
 
-| Scenario | Latency |
-|----------|---------|
-| Same machine (GPU) | ~100 nanoseconds |
-| Same machine (CPU) | ~1 microsecond |
-| Local network (RDMA) | ~10 microseconds |
-| Local network (TCP) | ~100 microseconds |
-| Internet | ~1-10 milliseconds |
+| Metric | ANDL | JSON | Improvement |
+|--------|------|------|-------------|
+| Message Size | 40-200 bytes | 5-50 KB | 50-100x |
+| Latency | <50ms | 10-50ms | Similar |
+| Parsing | Zero-copy | Text parse | ∞ |
+| Semantic | Native | Requires NLP | N/A |
 
-### Q22: What throughput can ANDL handle?
+### ANDL vs gRPC?
 
-**A**: Single-node throughput:
-- **GPU transport**: 900 GB/s
-- **Shared memory**: 50 GB/s
-- **TCP (10Gbps)**: 1.25 GB/s
+- **gRPC**: Great for service-to-service, text-based
+- **ANDL**: Optimized for AI-to-AI, semantic-native
 
-Scales horizontally with cluster size.
+Use gRPC for microservices, ANDL for AI communication.
 
-### Q23: How does ANDL handle large contexts?
+### ANDL vs Blockchain?
 
-**A**: ANDL uses **holographic compression**:
-- Unlimited context length
-- Context summarized into fixed-size vector
-- Information loss is minimal and controllable
-- Retrieval decompresses on-demand
+| Feature | Blockchain | ANDL NeuralConsensus |
+|---------|-----------|---------------------|
+| Consensus | Global | Local to message |
+| Latency | Minutes | Milliseconds |
+| Throughput | Low | High |
+| Use Case | Global consensus | Message verification |
 
-### Q24: Can ANDL handle high concurrency?
-
-**A**: Yes. ANDL is designed for high concurrency:
-- Lock-free data structures
-- Async/await support
-- Connection pooling
-- Load balancing
-
-Tested with 100,000+ concurrent connections.
+ANDL is for fast, local consensus; blockchain for global consensus.
 
 ---
 
 ## Troubleshooting
 
-### Q25: ImportError: No module named 'andl'
+### "Connection refused" error?
 
-**Solution**:
-```bash
-pip install -e .  # Install in development mode
-```
+Check:
+1. Nodes are running: `python -m andl.node --status`
+2. Firewall allows port 8080
+3. Network connectivity between nodes
 
-### Q26: GPU not detected
+### High latency?
 
-**Solution**: This is normal for CPU-only systems. ANDL will automatically fall back to shared memory transport.
+Possible causes:
+- Network congestion
+- Too many verification paths
+- Slow storage
 
-To force GPU usage:
+Solutions:
+- Reduce node count
+- Use faster storage (SSD)
+- Enable caching
+
+### Tamper detection false positives?
+
+Adjust similarity threshold:
 ```python
-import os
-os.environ["ANDL_FORCE_GPU"] = "1"
+consensus = NeuralConsensus(
+    similarity_threshold=0.80  # Default: 0.85
+)
 ```
 
-### Q27: Connection timeout
+Lower = more lenient, higher = more strict.
 
-**Possible causes**:
-1. Firewall blocking port
-2. Wrong address configuration
-3. Service not running
+### How do I debug?
 
-**Debug**:
+Enable debug logging:
 ```python
-from andl import AdaptivePhysicalLayer
-
-layer = AdaptivePhysicalLayer()
-caps = layer.negotiate_capabilities(peer_address)
-print(caps)  # Check negotiated capabilities
+import logging
+logging.basicConfig(level=logging.DEBUG)
 ```
 
-### Q28: Compression ratio is low
-
-**Solution**: Adjust compression parameters:
-```python
-from andl import VectorCompressor
-
-# More aggressive compression
-compressor = VectorCompressor(target_bits=4)  # Default is 8
-compressed = compressor.compress(vector)
-```
+Check logs in `~/.andl/logs/`.
 
 ---
 
-## Community and Support
+## Contributing Questions
 
-### Q29: How can I contribute?
+### How can I contribute?
 
-**A**: Ways to contribute:
-- Report bugs on GitHub
-- Submit pull requests
-- Write documentation
-- Share use cases
-- Answer questions on Discord
+See [CONTRIBUTING.md](CONTRIBUTING.md) for:
+- Reporting bugs
+- Suggesting features
+- Submitting code
+- Improving documentation
 
-See [Contributing Guide](CONTRIBUTING.md).
+### What's the roadmap?
 
-### Q30: Where can I get help?
+**2026 Q2**:
+- Zero-knowledge proof integration
+- Hardware acceleration (ANDL-NPU)
 
-| Channel | Best For | Response Time |
-|---------|----------|---------------|
-| GitHub Issues | Bugs, features | 24-48 hours |
-| Discord | Quick questions | Real-time |
-| Stack Overflow | How-to questions | Community |
-| Email (jialine0426@hotmail.com) | Enterprise support | 4 hours |
+**2026 Q3**:
+- Cross-chain anchoring
+- Federated reputation system
 
-### Q31: Is there a beta program?
-
-**A**: Yes! We're accepting 10-20 companies for our beta program. Benefits include:
-- Early access to ANDL 2.0
-- Direct technical support
-- Influence protocol design
-- 50% discount on Enterprise Edition
-
-Apply: jialine0426@hotmail.com
-
----
-
-## Roadmap Questions
-
-### Q32: When will ANDL 2.0 be released?
-
-**A**: Timeline:
-- **Phase 1** (Months 1-2): Protocol definition ✅ Complete
-- **Phase 2** (Months 3-4): Beta testing 🔄 In progress
-- **Phase 3** (Months 5-6): Open source release
-- **Phase 4** (Months 7-12): Commercial deployment
-
-### Q33: What features are planned?
-
-**Near term**:
-- C++ implementation
-- Rust SDK
-- Kubernetes operator
-- WebSocket transport
-
-**Long term**:
+**2026 Q4**:
 - Quantum-resistant cryptography
-- Federated learning support
-- Edge device optimization
-- Self-evolving protocol
+- Formal verification
 
-### Q34: Will there be a conference or meetup?
+### How do I report security issues?
 
-**A**: Yes! ANDL Developer Conference planned for Q3 2026. Sign up for updates at 
-jialine0426@hotmail.com
+Email: jialine0426@hotmail.com
 
----
-
-## Glossary
-
-| Term | Definition |
-|------|------------|
-| **ANDL** | AI Native Description Language |
-| **Semantic Vector** | Dense numerical representation of meaning |
-| **Holographic Compression** | Summarizing context into fixed-size vectors |
-| **Consensus** | Multi-AI agreement mechanism |
-| **Transport** | Physical data transmission layer |
-| **L1/L2/L3** | Protocol architecture layers |
+Please DO NOT open public issues for security vulnerabilities.
 
 ---
 
-**Still have questions?**
+## Business Questions
 
+### Can I use ANDL in commercial products?
+
+Yes! Apache 2.0 license allows commercial use.
+
+### Do I need to pay royalties?
+
+No. ANDL is completely free.
+
+### Is there commercial support?
+
+Community support is free via GitHub.
+
+For enterprise support, contact: jialine0426@hotmail.com
+
+### Can I modify ANDL for my needs?
+
+Yes! You can:
+- Fork the repository
+- Modify the code
+- Use in your products
+- Distribute modifications
+
+Just keep the Apache 2.0 license and attribution.
+
+---
+
+## Advanced Questions
+
+### How do I implement a custom encoder?
+
+```python
+from andl import SemanticEncoder
+
+class MyEncoder(SemanticEncoder):
+    def encode(self, text: str) -> np.ndarray:
+        # Your encoding logic
+        return vector
+    
+    def decode(self, vector: np.ndarray) -> str:
+        # Your decoding logic
+        return text
+```
+
+### Can I use ANDL with edge devices?
+
+Yes! ANDL supports:
+- ARM processors
+- Limited memory (512MB+)
+- Low bandwidth
+
+Use quantized models for edge deployment.
+
+### How do I integrate with existing systems?
+
+Options:
+1. **Direct SDK**: Import andl library
+2. **REST API**: HTTP endpoints
+3. **Message Queue**: Kafka/RabbitMQ integration
+4. **Sidecar**: Deploy as proxy
+
+### What's the maximum message size?
+
+Default: 1024-dim vectors (~4KB)
+
+Can be extended:
+- 2048-dim: ~8KB
+- 4096-dim: ~16KB
+
+Larger vectors = more semantic richness.
+
+---
+
+## Still Have Questions?
+
+- 📖 Check [Documentation](https://github.com/jialine/andl/tree/main/docs)
+- 💬 Ask in [GitHub Discussions](https://github.com/jialine/andl/discussions)
+- 🐛 Report [Issues](https://github.com/jialine/andl/issues)
 - 📧 Email: jialine0426@hotmail.com
-- 🐙 GitHub: https://github.com/jialine/andl
 
 ---
 
-*This FAQ is updated regularly. Last update: April 11, 2026*
+**Last Updated**: 2026-04-13  
+**Version**: 2.0.1

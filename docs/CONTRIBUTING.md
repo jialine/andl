@@ -1,300 +1,239 @@
 # Contributing to ANDL
 
-Thank you for your interest in contributing to ANDL! This document provides guidelines and instructions for contributing.
+Thank you for your interest in contributing to ANDL (AI Native Data Link)! This document provides guidelines and instructions for contributing.
 
 ## Table of Contents
 
-1. [Code of Conduct](#code-of-conduct)
-2. [Getting Started](#getting-started)
-3. [How to Contribute](#how-to-contribute)
-4. [Development Setup](#development-setup)
-5. [Coding Standards](#coding-standards)
-6. [Testing](#testing)
-7. [Documentation](#documentation)
-8. [Community](#community)
-
----
+- [Code of Conduct](#code-of-conduct)
+- [Getting Started](#getting-started)
+- [How to Contribute](#how-to-contribute)
+- [Development Setup](#development-setup)
+- [Coding Standards](#coding-standards)
+- [Testing](#testing)
+- [Documentation](#documentation)
+- [Commit Message Guidelines](#commit-message-guidelines)
+- [Pull Request Process](#pull-request-process)
 
 ## Code of Conduct
 
-### Our Pledge
+This project adheres to a code of conduct. By participating, you are expected to uphold this code:
 
-We pledge to make participation in our project a harassment-free experience for everyone, regardless of age, body size, disability, ethnicity, gender identity and expression, level of experience, nationality, personal appearance, race, religion, or sexual identity and orientation.
-
-### Our Standards
-
-**Positive behavior:**
-- Using welcoming and inclusive language
-- Being respectful of differing viewpoints
-- Gracefully accepting constructive criticism
-- Focusing on what is best for the community
-
-**Unacceptable behavior:**
-- Trolling, insulting/derogatory comments
-- Public or private harassment
-- Publishing others' private information
-- Other conduct which could reasonably be considered inappropriate
-
----
+- Be respectful and inclusive
+- Welcome newcomers
+- Focus on constructive feedback
+- Respect different viewpoints and experiences
 
 ## Getting Started
 
-### Ways to Contribute
+### Prerequisites
 
-- **Report bugs**: Open an issue on GitHub
-- **Suggest features**: Start a discussion
-- **Write code**: Submit a pull request
-- **Improve docs**: Fix typos, add examples
-- **Help others**: Answer questions on Discord
+- Python 3.10+
+- Git
+- Node.js 18+ (for documentation)
 
-### Before You Start
+### Fork and Clone
 
-1. **Check existing issues**: Avoid duplicates
-2. **Discuss major changes**: Open an issue first
-3. **Read the whitepaper**: Understand the architecture
-4. **Join Discord**: Real-time communication
+```bash
+# Fork the repository on GitHub
+# Then clone your fork
+git clone https://github.com/YOUR_USERNAME/andl.git
+cd andl
 
----
+# Add upstream remote
+git remote add upstream https://github.com/jialine/andl.git
+```
 
 ## How to Contribute
 
 ### Reporting Bugs
 
-Use GitHub Issues with this template:
+Before creating a bug report:
+
+1. Check if the issue already exists
+2. Use the latest version
+3. Collect relevant information
+
+When reporting:
 
 ```markdown
-**Description**
-Clear description of the bug
+**Description**: Clear description of the bug
 
-**To Reproduce**
-Steps to reproduce:
-1. Go to '...'
-2. Click on '...'
-3. See error
+**Steps to Reproduce**:
+1. Step one
+2. Step two
+3. ...
 
-**Expected Behavior**
-What you expected to happen
+**Expected Behavior**: What should happen
 
-**Environment**
+**Actual Behavior**: What actually happens
+
+**Environment**:
 - OS: [e.g., Ubuntu 22.04]
-- Python: [e.g., 3.10]
-- ANDL Version: [e.g., 2.0.0]
-
-**Additional Context**
-Screenshots, logs, etc.
+- Python: [e.g., 3.10.4]
+- ANDL Version: [e.g., 2.0.1]
 ```
 
-### Suggesting Features
+### Suggesting Enhancements
 
-Use GitHub Discussions:
+Enhancement suggestions are tracked as GitHub issues:
 
-```markdown
-**Feature Request**
-Clear description of the feature
+- Use a clear title
+- Provide detailed description
+- Explain why this enhancement would be useful
+- List possible alternatives
 
-**Motivation**
-Why is this feature needed?
+### Contributing Code
 
-**Proposed Solution**
-How should it work?
+#### Types of Contributions
 
-**Alternatives**
-What else was considered?
-```
+- **Bug fixes**: Fix existing issues
+- **Features**: Add new functionality
+- **Documentation**: Improve docs
+- **Tests**: Add test coverage
+- **Performance**: Optimize existing code
 
-### Submitting Pull Requests
+#### Good First Issues
 
-#### PR Process
-
-1. **Fork the repository**
-   ```bash
-   git clone https://github.com/YOUR_USERNAME/andl.git
-   cd andl
-   ```
-
-2. **Create a branch**
-   ```bash
-   git checkout -b feature/your-feature-name
-   # or
-   git checkout -b fix/bug-description
-   ```
-
-3. **Make changes**
-   - Write code
-   - Add tests
-   - Update docs
-
-4. **Commit**
-   ```bash
-   git add .
-   git commit -m "feat: add new feature"
-   ```
-
-5. **Push and create PR**
-   ```bash
-   git push origin feature/your-feature-name
-   ```
-
-#### Commit Message Format
-
-Use [Conventional Commits](https://www.conventionalcommits.org/):
-
-```
-<type>(<scope>): <description>
-
-[optional body]
-
-[optional footer]
-```
-
-**Types:**
-- `feat`: New feature
-- `fix`: Bug fix
-- `docs`: Documentation
-- `style`: Formatting
-- `refactor`: Code restructuring
-- `test`: Tests
-- `chore`: Maintenance
-
-**Examples:**
-```
-feat(transport): add RDMA support
-
-fix(compression): handle edge case in sparsification
-
-docs(api): add examples for consensus module
-```
-
----
+Look for issues labeled:
+- `good first issue`
+- `help wanted`
+- `documentation`
 
 ## Development Setup
 
-### Prerequisites
-
-- Python 3.8+
-- Git
-- Make (optional)
-
-### Setup Steps
+### Python Environment
 
 ```bash
-# 1. Clone repository
-git clone https://github.com/andl/andl.git
-cd andl
-
-# 2. Create virtual environment
+# Create virtual environment
 python -m venv venv
-source venv/bin/activate  # Linux/Mac
-# or
-venv\Scripts\activate  # Windows
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 
-# 3. Install dependencies
+# Install dependencies
 pip install -r requirements.txt
 pip install -r requirements-dev.txt
 
-# 4. Install in development mode
-pip install -e .
-
-# 5. Run tests
-pytest tests/ -v
+# Install pre-commit hooks
+pre-commit install
 ```
 
-### Project Structure
+### Running Tests
 
-```
-andl/
-├── core/           # Core protocol implementation
-├── docs/           # Documentation
-├── tests/          # Test suite
-├── examples/       # Example code
-├── benchmarks/     # Performance benchmarks
-└── scripts/        # Utility scripts
+```bash
+# Run all tests
+pytest
+
+# Run with coverage
+pytest --cov=andl --cov-report=html
+
+# Run specific test file
+pytest tests/test_neural_consensus.py
+
+# Run with verbose output
+pytest -v
 ```
 
----
+### Building Documentation
+
+```bash
+cd docs
+pip install -r requirements.txt
+make html
+```
 
 ## Coding Standards
 
 ### Python Style Guide
 
-Follow [PEP 8](https://pep8.org/) with these additions:
+We follow PEP 8 with some modifications:
 
-**Formatting:**
-- Use `black` for code formatting
-- Use `isort` for import sorting
-- Max line length: 100 characters
-
-**Type Hints:**
 ```python
-def compress_vector(
+# Maximum line length: 100 characters
+# Use 4 spaces for indentation
+# Use double quotes for strings
+
+class NeuralConsensus:
+    """
+    Docstring style: Google style
+    
+    Args:
+        node_count: Number of consensus nodes
+        redundancy: Replication factor
+        
+    Returns:
+        ConsensusResult with verification status
+    """
+    
+    def __init__(self, node_count: int = 5, redundancy: int = 3):
+        self.node_count = node_count
+        self.redundancy = redundancy
+```
+
+### Type Hints
+
+Use type hints for all function signatures:
+
+```python
+from typing import List, Dict, Optional
+
+def verify_vector(
     vector: np.ndarray,
-    target_bits: int = 8
-) -> CompressedVector:
-    """Compress a semantic vector."""
+    threshold: float = 0.67
+) -> ConsensusResult:
     ...
 ```
 
-**Docstrings:**
+### Documentation Strings
+
+All public functions must have docstrings:
+
 ```python
-def function_name(param: Type) -> ReturnType:
+def store_shard(
+    self,
+    message_id: str,
+    shard_id: int,
+    data: np.ndarray
+) -> bool:
     """
-    Short description.
+    Store a vector shard on this node.
     
-    Longer description if needed.
+    Stores the shard data with integrity hash for later
+    verification. The shard is persisted to local storage.
     
     Args:
-        param: Description of parameter
+        message_id: Unique identifier for the message
+        shard_id: Index of the shard (0-3)
+        data: Vector data to store
         
     Returns:
-        Description of return value
+        True if storage successful, False otherwise
         
     Raises:
-        ValueError: When invalid input
+        StorageError: If disk is full or write fails
+        
+    Example:
+        >>> node = ConsensusNode("node_0")
+        >>> success = node.store_shard("msg_001", 0, vector)
+        >>> assert success
     """
 ```
-
-### Code Quality Tools
-
-```bash
-# Format code
-black core/ tests/
-
-# Sort imports
-isort core/ tests/
-
-# Lint
-flake8 core/ tests/
-
-# Type check
-mypy core/
-
-# Run all checks
-make lint
-```
-
-### Naming Conventions
-
-| Type | Convention | Example |
-|------|------------|---------|
-| Classes | PascalCase | `SemanticGraph` |
-| Functions | snake_case | `compress_vector` |
-| Constants | UPPER_SNAKE | `DEFAULT_BUFFER_SIZE` |
-| Private | _leading_underscore | `_internal_method` |
-
----
 
 ## Testing
 
-### Test Structure
+### Test Organization
 
 ```
 tests/
-├── test_physical_layer.py
-├── test_transport_layer.py
-├── test_semantic_layer.py
-├── test_application_layer.py
-├── test_consensus.py
-└── test_integration.py
+├── unit/              # Unit tests
+│   ├── test_encoder.py
+│   ├── test_consensus.py
+│   └── test_sharding.py
+├── integration/       # Integration tests
+│   ├── test_network.py
+│   └── test_e2e.py
+├── performance/       # Performance benchmarks
+│   └── test_latency.py
+└── fixtures/          # Test data
+    └── sample_vectors.npy
 ```
 
 ### Writing Tests
@@ -302,128 +241,198 @@ tests/
 ```python
 import pytest
 import numpy as np
-from andl import VectorCompressor
+from andl import NeuralConsensus
 
-class TestVectorCompression:
-    """Test vector compression functionality."""
+class TestNeuralConsensus:
+    """Test suite for NeuralConsensus"""
     
-    def test_compression_ratio(self):
-        """Test that compression reduces size."""
-        compressor = VectorCompressor(target_bits=8)
-        original = np.random.randn(1024).astype(np.float32)
-        
-        compressed = compressor.compress(original)
-        
-        assert compressed.compression_ratio > 1.0
+    @pytest.fixture
+    def consensus(self):
+        return NeuralConsensus(node_count=3)
     
-    def test_roundtrip(self):
-        """Test compress-decompress roundtrip."""
-        compressor = VectorCompressor(target_bits=8)
-        original = np.random.randn(512).astype(np.float32)
+    def test_store_and_verify(self, consensus):
+        """Test basic store and verify flow"""
+        vector = np.random.randn(1024)
+        result = consensus.store(vector, "test_001")
         
-        compressed = compressor.compress(original)
-        restored = compressor.decompress(compressed)
+        assert result["status"] == "stored"
         
-        # Allow small numerical error
-        np.testing.assert_allclose(original, restored, rtol=0.1)
-```
-
-### Running Tests
-
-```bash
-# All tests
-pytest tests/ -v
-
-# Specific test file
-pytest tests/test_compression.py -v
-
-# Specific test
-pytest tests/test_compression.py::TestVectorCompression::test_roundtrip -v
-
-# With coverage
-pytest tests/ --cov=andl --cov-report=html
-
-# Parallel execution
-pytest tests/ -n auto
+        verification = consensus.verify("test_001", vector)
+        assert verification.status == ConsensusStatus.VALID
+    
+    def test_tamper_detection(self, consensus):
+        """Test detection of tampered vectors"""
+        original = np.random.randn(1024)
+        consensus.store(original, "test_002")
+        
+        tampered = np.random.randn(1024)  # Different vector
+        verification = consensus.verify("test_002", tampered)
+        
+        assert verification.status == ConsensusStatus.TAMPERED
 ```
 
 ### Test Coverage
 
 Aim for:
-- **L1 Protocol Layer**: 95%+ coverage
-- **L2 Implementation**: 90%+ coverage
-- **Integration tests**: Critical paths covered
-
----
+- Minimum 80% code coverage
+- 100% coverage for critical paths
+- All public APIs tested
 
 ## Documentation
 
-### Documentation Types
+### Types of Documentation
 
-1. **Code comments**: Explain "why", not "what"
-2. **Docstrings**: API documentation
-3. **Guides**: Tutorials and how-tos
-4. **Whitepapers**: Architecture and design
+1. **Code Documentation**: Docstrings in code
+2. **API Documentation**: Auto-generated from docstrings
+3. **User Guides**: Markdown files in /docs
+4. **Architecture Decision Records**: In /docs/adr
+
+### Documentation Style
+
+- Use clear, concise language
+- Include code examples
+- Add diagrams where helpful
+- Keep examples runnable
 
 ### Building Docs
 
 ```bash
 # Install docs dependencies
-pip install -r requirements-docs.txt
+pip install -r docs/requirements.txt
 
-# Build documentation
-mkdocs build
+# Build HTML docs
+cd docs
+make html
 
 # Serve locally
-mkdocs serve
+python -m http.server 8000 -d _build/html
 ```
 
-### Documentation Style
+## Commit Message Guidelines
 
-- Clear and concise
-- Include examples
-- Keep up-to-date with code
-- Use diagrams where helpful
+We follow conventional commits:
 
----
+```
+<type>(<scope>): <subject>
+
+<body>
+
+<footer>
+```
+
+### Types
+
+- **feat**: New feature
+- **fix**: Bug fix
+- **docs**: Documentation only
+- **style**: Code style (formatting)
+- **refactor**: Code refactoring
+- **test**: Adding tests
+- **chore**: Maintenance tasks
+
+### Examples
+
+```
+feat(consensus): add dynamic reputation adjustment
+
+Implement automatic reputation scoring based on
+verification success rate. Nodes with high success
+rates get higher weight in consensus.
+
+Closes #123
+```
+
+```
+fix(sharding): correct shard boundary calculation
+
+Previous implementation had off-by-one error in
+shard decomposition, causing data corruption.
+
+Fixes #456
+```
+
+## Pull Request Process
+
+### Before Submitting
+
+1. **Update documentation**: Reflect your changes
+2. **Add tests**: Ensure coverage
+3. **Run tests**: All tests must pass
+4. **Update CHANGELOG**: Add entry for your changes
+5. **Rebase**: Keep history clean
+
+### PR Template
+
+```markdown
+## Description
+Brief description of changes
+
+## Type of Change
+- [ ] Bug fix
+- [ ] New feature
+- [ ] Documentation
+- [ ] Performance improvement
+
+## Testing
+- [ ] Unit tests added/updated
+- [ ] Integration tests pass
+- [ ] Manual testing performed
+
+## Checklist
+- [ ] Code follows style guidelines
+- [ ] Self-review completed
+- [ ] Documentation updated
+- [ ] CHANGELOG.md updated
+```
+
+### Review Process
+
+1. **Automated checks**: CI must pass
+2. **Code review**: At least one approval
+3. **Discussion**: Address feedback
+4. **Merge**: Maintainers merge approved PRs
+
+### After Merge
+
+- Delete your branch
+- Monitor for issues
+- Update related documentation
+
+## Release Process
+
+Maintainers follow this process:
+
+1. Update version in `__init__.py`
+2. Update CHANGELOG.md
+3. Create git tag: `git tag v2.0.2`
+4. Push tag: `git push origin v2.0.2`
+5. GitHub Actions creates release
 
 ## Community
 
 ### Communication Channels
 
-| Channel | Purpose | Link |
-|---------|---------|------|
-| GitHub Issues | Bugs, features | github.com/jialine/andl/issues |
-| GitHub Discussions | Questions, ideas | github.com/jialine/andl/discussions |
-| Discord | Real-time chat | discord.gg/andl |
-| Twitter | Announcements | @andl_protocol |
-| Email | Private | jialine0426@hotmail.com|
+- **GitHub Issues**: Bug reports, feature requests
+- **GitHub Discussions**: General questions
+- **Email**: jialine0426@hotmail.com (security issues)
 
 ### Recognition
 
 Contributors will be:
 - Listed in CONTRIBUTORS.md
 - Mentioned in release notes
-- Invited to contributor events
-
-### Becoming a Maintainer
-
-Long-term contributors may be invited to become maintainers:
-- Consistent quality contributions
-- Good communication
-- Understanding of project values
-- Community involvement
-
----
+- Invited to organization (significant contributions)
 
 ## License
 
-By contributing, you agree that your contributions will be licensed under the Apache 2.0 License (for L1/L2) or as specified in the dual-licensing agreement.
-
----
+By contributing, you agree that your contributions will be licensed under the Apache License 2.0.
 
 ## Questions?
 
-- 📧 Email: jialine0426@hotmail.com
+- Check existing documentation
+- Search closed issues
+- Ask in GitHub Discussions
 
-**Thank you for contributing to ANDL! 🚀**
+---
+
+Thank you for contributing to ANDL! 🚀

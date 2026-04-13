@@ -1,40 +1,26 @@
-# ANDL 2.0 Quick Start Guide
-## Get Started in 5 Minutes
+# Quick Start Guide
 
-**Version**: 2.0.0  
-**Last Updated**: April 11, 2026
+Get up and running with ANDL 2.0.1 in 5 minutes.
 
----
-
-## Table of Contents
-
-1. [Installation](#1-installation)
-2. [First ANDL Message](#2-first-andl-message)
-3. [Basic Usage](#3-basic-usage)
-4. [Running Tests](#4-running-tests)
-5. [Next Steps](#5-next-steps)
-
----
-
-## 1. Installation
+## Installation
 
 ### Prerequisites
 
-- Python 3.8+
-- NumPy
-- (Optional) GPU support for optimal performance
+- Python 3.10 or higher
+- pip package manager
+- (Optional) Git for development
+
+### Install from PyPI
+
+```bash
+pip install andl2
+```
 
 ### Install from Source
 
 ```bash
-# Clone the repository
-git clone https://github.com/andl/andl.git
+git clone https://github.com/jialine/andl.git
 cd andl
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Install ANDL package
 pip install -e .
 ```
 
@@ -42,268 +28,315 @@ pip install -e .
 
 ```bash
 python -c "import andl; print(andl.__version__)"
-# Output: 2.0.0
+# Output: 2.0.1
 ```
 
 ---
 
-## 2. First ANDL Message
+## Your First ANDL Application
 
-### 2.1 Create Your First Message
+### 1. Basic Semantic Encoding
 
 ```python
 import numpy as np
-from andl import ANDLMessage, MessageType
+from andl import SemanticEncoder
 
-# Create a semantic vector (normally from encoder)
-vector = np.random.randn(1024).astype(np.float32)
+# Create encoder
+encoder = SemanticEncoder()
 
-# Create ANDL message
-msg = ANDLMessage.create(
-    sender_id="my_agent",
-    receiver_id="target_agent",
-    semantic_vector=vector,
-    message_type=MessageType.REQUEST
-)
+# Encode text to semantic vector
+text = "Transfer 100 yuan to Alice"
+vector = encoder.encode(text)
 
-print(f"Message ID: {msg.header.message_id}")
-print(f"Sender: {msg.header.sender_id}")
-print(f"Timestamp: {msg.header.timestamp_ns}")
+print(f"Text: {text}")
+print(f"Vector shape: {vector.shape}")  # (1024,)
+print(f"Vector sample: {vector[:5]}")
 ```
 
-**Output:**
-```
-Message ID: 550e8400-e29b-41d4-a716-446655440000
-Sender: my_agent
-Timestamp: 1712800800000000000
-```
-
-### 2.2 Serialize and Deserialize
+### 2. Distributed Storage
 
 ```python
-# Serialize to bytes
-data = msg.serialize()
-print(f"Serialized size: {len(data)} bytes")
+import asyncio
+from andl import NeuralConsensus
 
-# Deserialize back
-restored = ANDLMessage.deserialize(data)
-print(f"Restored sender: {restored.header.sender_id}")
+async def store_message():
+    # Create consensus network
+    consensus = NeuralConsensus(
+        node_count=5,      # 5 nodes
+        redundancy=3       # 3x redundancy
+    )
+    
+    # Encode message
+    vector = encoder.encode("Hello, NeuralConsensus!")
+    
+    # Store with distributed redundancy
+    result = await consensus.store(vector, "msg_001")
+    
+    print(f"Storage result: {result}")
+    return result
+
+# Run
+asyncio.run(store_message())
+```
+
+### 3. Verify Message Integrity
+
+```python
+async def verify_message():
+    # Verify stored message
+    verification = await consensus.verify("msg_001", vector)
+    
+    print(f"Status: {verification.status}")
+    print(f"Agreement: {verification.agreement_rate:.1%}")
+    print(f"Confidence: {verification.confidence:.1%}")
+    
+    if verification.status == ConsensusStatus.VALID:
+        print("✓ Message is authentic!")
+    elif verification.status == ConsensusStatus.TAMPERED:
+        print("⚠️  Message has been tampered!")
+    
+    return verification
+
+asyncio.run(verify_message())
+```
+
+### 4. Complete Example
+
+```python
+import asyncio
+import numpy as np
+from andl import NeuralConsensus, SemanticEncoder, ConsensusStatus
+
+async def main():
+    print("=" * 60)
+    print("ANDL 2.0.1 Quick Start Demo")
+    print("=" * 60)
+    
+    # Initialize
+    encoder = SemanticEncoder()
+    consensus = NeuralConsensus(node_count=5)
+    
+    # Step 1: Create and store message
+    print("\n[Step 1] Creating message...")
+    original_text = "Transfer 100 yuan to Alice"
+    original_vector = encoder.encode(original_text)
+    print(f"Text: {original_text}")
+    
+    print("\n[Step 2] Storing message...")
+    storage_result = await consensus.store(original_vector, "payment_001")
+    print(f"Stored across {storage_result['shards']} shards")
+    print(f"Redundancy: {storage_result['redundancy']}x")
+    
+    # Step 3: Verify authentic message
+    print("\n[Step 3] Verifying authentic message...")
+    verification = await consensus.verify("payment_001", original_vector)
+    print(f"Status: {verification.status.value}")
+    print(f"Agreement: {verification.agreement_rate:.1%}")
+    
+    # Step 4: Try to verify tampered message
+    print("\n[Step 4] Testing tamper detection...")
+    tampered_text = "Transfer 100 yuan to Bob (HACKER)"
+    tampered_vector = encoder.encode(tampered_text)
+    
+    verification = await consensus.verify("payment_001", tampered_vector)
+    print(f"Status: {verification.status.value}")
+    print(f"Agreement: {verification.agreement_rate:.1%}")
+    
+    if verification.status == ConsensusStatus.TAMPERED:
+        print("\n✓ Tampering detected! NeuralConsensus is working.")
+    
+    print("\n" + "=" * 60)
+    print("Demo completed successfully!")
+    print("=" * 60)
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+Run it:
+```bash
+python demo.py
+```
+
+Expected output:
+```
+============================================================
+ANDL 2.0.1 Quick Start Demo
+============================================================
+
+[Step 1] Creating message...
+Text: Transfer 100 yuan to Alice
+
+[Step 2] Storing message...
+Stored across 4 shards
+Redundancy: 3x
+
+[Step 3] Verifying authentic message...
+Status: valid
+Agreement: 100.0%
+
+[Step 4] Testing tamper detection...
+Status: tampered
+Agreement: 0.0%
+
+✓ Tampering detected! NeuralConsensus is working.
+
+============================================================
+Demo completed successfully!
+============================================================
 ```
 
 ---
 
-## 3. Basic Usage
+## Running a Local Network
 
-### 3.1 Vector Compression
-
-```python
-from andl import VectorCompressor
-
-# Original vector
-original = np.random.randn(4096).astype(np.float32)
-print(f"Original size: {original.nbytes} bytes")
-
-# Compress
-compressor = VectorCompressor(target_bits=8)
-compressed = compressor.compress(original)
-
-print(f"Compressed size: {compressed.data.nbytes} bytes")
-print(f"Compression ratio: {compressed.compression_ratio:.2f}x")
-
-# Decompress
-decompressed = compressor.decompress(compressed)
-```
-
-### 3.2 Semantic Graph
-
-```python
-from andl import SemanticGraph, SemanticNode, SemanticEdge
-
-# Create graph
-graph = SemanticGraph()
-
-# Add nodes
-node_a = SemanticNode(
-    id="concept_a",
-    vector=np.array([1.0, 0.0, 0.0]),
-    node_type="concept"
-)
-node_b = SemanticNode(
-    id="concept_b", 
-    vector=np.array([0.0, 1.0, 0.0]),
-    node_type="concept"
-)
-
-graph.add_node(node_a)
-graph.add_node(node_b)
-
-# Add relationship
-edge = SemanticEdge(
-    source_id="concept_a",
-    target_id="concept_b",
-    relation_type="related_to"
-)
-graph.add_edge(edge)
-
-# Traverse graph
-results = graph.traverse("concept_a", max_depth=2)
-print(f"Found {len(results)} nodes")
-```
-
-### 3.3 Physical Transport
-
-```python
-from andl import AdaptivePhysicalLayer, Address
-
-# Initialize adaptive layer
-layer = AdaptivePhysicalLayer()
-
-# Select best transport based on context
-context = {
-    "same_machine": True,
-    "has_gpu": False
-}
-transport = layer.select_transport(context)
-
-print(f"Selected transport: {type(transport).__name__}")
-
-# Send data
-addr = Address(host="localhost", port=8080)
-data = b"Hello, ANDL!"
-transport.send(data, addr)
-
-# Receive data
-received = transport.receive(addr)
-print(f"Received: {received.decode()}")
-```
-
-### 3.4 Multi-AI Consensus
-
-```python
-from andl import VectorConsensus
-
-# Multiple AI proposals
-proposals = [
-    np.random.randn(512).astype(np.float32),
-    np.random.randn(512).astype(np.float32),
-    np.random.randn(512).astype(np.float32),
-]
-
-# Voting weights
-weights = [0.5, 0.3, 0.2]
-
-# Reach consensus
-consensus = VectorConsensus()
-result, metadata = consensus.vote(proposals, weights)
-
-print(f"Consensus reached in {metadata['iterations']} iterations")
-print(f"Outliers detected: {metadata['outliers_detected']}")
-print(f"Converged: {metadata['converged']}")
-```
-
----
-
-## 4. Running Tests
-
-### Run All Tests
+### Start Multiple Nodes
 
 ```bash
-cd /path/to/andl
-python -m pytest tests/ -v
+# Terminal 1: Node 0
+python -m andl.node --id node_0 --port 8000
+
+# Terminal 2: Node 1
+python -m andl.node --id node_1 --port 8001 --peers localhost:8000
+
+# Terminal 3: Node 2
+python -m andl.node --id node_2 --port 8002 --peers localhost:8000,localhost:8001
 ```
 
-### Run Specific Test
+### Connect Your Application
 
-```bash
-# Test physical layer
-python -m pytest tests/test_andl.py::TestPhysicalLayer -v
-
-# Test compression
-python -m pytest tests/test_andl.py::TestVectorCompression -v
-```
-
-### Expected Output
-
-```
-tests/test_andl.py::TestPhysicalLayer::test_shared_memory_transport PASSED
-tests/test_andl.py::TestPhysicalLayer::test_tcp_transport PASSED
-tests/test_andl.py::TestVectorCompression::test_compression_decompression PASSED
-...
-============================== 15 passed in 0.5s
+```python
+consensus = NeuralConsensus(
+    node_endpoints=[
+        "http://localhost:8000",
+        "http://localhost:8001",
+        "http://localhost:8002"
+    ]
+)
 ```
 
 ---
 
-## 5. Next Steps
+## Configuration
+
+### Basic Config
+
+```python
+from andl import NeuralConsensus
+
+consensus = NeuralConsensus(
+    node_count=5,              # Number of nodes
+    redundancy=3,              # Replication factor
+    consensus_threshold=0.67,  # 67% agreement required
+    shard_sizes=[128, 256, 512, 128]  # Semantic shard dimensions
+)
+```
+
+### From Config File
+
+```yaml
+# config.yaml
+network:
+  node_count: 5
+  redundancy: 3
+  consensus_threshold: 0.67
+
+storage:
+  backend: "rocksdb"
+  path: "/var/andl/data"
+
+security:
+  encryption: true
+  key_rotation_days: 30
+```
+
+```python
+import yaml
+from andl import NeuralConsensus
+
+with open("config.yaml") as f:
+    config = yaml.safe_load(f)
+
+consensus = NeuralConsensus.from_config(config)
+```
+
+---
+
+## Next Steps
 
 ### Learn More
 
-- **Technical Whitepaper**: `docs/whitepaper-en.md`
-- **Protocol Specification**: `specs/ANDL-2.0-SPEC.md`
-- **API Reference**: `docs/api-reference.md`
+- 📖 [Protocol Specification](../specs/ANDL-2.0.1-SPEC.md)
+- 🔬 [Experiment Report](tamper-proof-experiment-report.md)
+- 💡 [Design Philosophy](whitepaper-cn.md)
+
+### Examples
+
+- [Basic Chat Application](../examples/chat/)
+- [Distributed AI Inference](../examples/inference/)
+- [Secure Data Sharing](../examples/data-sharing/)
 
 ### Join Community
 
-- GitHub: https://github.com/andl/andl
-- Discord: https://discord.gg/andl
-- Forum: https://forum.andl.io
-
-### Beta Program
-
-Want early access? Join our beta program:
-- See `docs/beta-partners-en.md` for details
-- Contact: jialine0426@hotmail.com
+- 💬 [GitHub Discussions](https://github.com/jialine/andl/discussions)
+- 🐛 [Report Issues](https://github.com/jialine/andl/issues)
+- 🤝 [Contributing Guide](CONTRIBUTING.md)
 
 ---
 
-## Troubleshooting
+## Common Issues
 
-### Import Error
+### ImportError: No module named 'andl'
 
-```
-ModuleNotFoundError: No module named 'andl'
-```
-
-**Solution**: Install in development mode
 ```bash
-pip install -e .
+# Solution: Install in virtual environment
+python -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
+pip install andl2
 ```
 
-### NumPy Version Conflict
+### Connection refused
 
-```
-RuntimeError: NumPy version mismatch
-```
-
-**Solution**: Update NumPy
 ```bash
-pip install --upgrade numpy
+# Check if nodes are running
+python -m andl.node --status
+
+# Or start a local test network
+python -m andl.network --local --nodes 3
 ```
 
-### GPU Not Detected
+### High memory usage
 
+```python
+# Reduce node count for development
+consensus = NeuralConsensus(node_count=3)
 ```
-Warning: GPU not available, falling back to CPU
-```
-
-**Solution**: This is normal. ANDL works without GPU using virtual memory manager.
 
 ---
 
-## Quick Reference
+## Performance Tips
 
-| Task | Code |
-|------|------|
-| Create message | `ANDLMessage.create(sender, receiver, vector)` |
-| Compress vector | `VectorCompressor().compress(vector)` |
-| Build graph | `SemanticGraph().add_node(node).add_edge(edge)` |
-| Send data | `transport.send(data, address)` |
-| Consensus | `VectorConsensus().vote(proposals, weights)` |
+1. **Use batch operations**:
+```python
+# Instead of individual stores
+results = await consensus.store_batch(vectors)
+```
+
+2. **Enable caching**:
+```python
+consensus = NeuralConsensus(
+    cache_enabled=True,
+    cache_ttl=300  # 5 minutes
+)
+```
+
+3. **Use GPU encoding** (if available):
+```python
+encoder = SemanticEncoder(device="cuda")
+```
 
 ---
 
-**Happy coding with ANDL! 🚀**
+**You're ready to build with ANDL!** 🚀
 
----
-
-*For more examples, see `examples/` directory.*
+For questions, see [FAQ](FAQ.md) or join [Discussions](https://github.com/jialine/andl/discussions).

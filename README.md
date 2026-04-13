@@ -1,34 +1,38 @@
-# ANDL 2.0
-## AI Native Data Link Protocol
+# ANDL 2.0.1
+## AI Native Data Link Protocol - NeuralConsensus Edition
 
-[![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)](https://github.com/andl/andl2)
+[![Version](https://img.shields.io/badge/version-2.0.1-blue.svg)](https://github.com/jialine/andl)
 [![License](https://img.shields.io/badge/license-Apache%202.0-green.svg)](LICENSE)
 [![Status](https://img.shields.io/badge/status-release-brightgreen.svg)]()
 
-**ANDL 2.0** (AI Native Data Link) is a vector-based communication protocol designed specifically for AI-to-AI communication.
+**ANDL 2.0.1** (AI Native Data Link) is a vector-based communication protocol with distributed tamper-proof capabilities, designed specifically for AI-to-AI communication.
 
-> 🎯 **Mission**: Enable efficient, semantic-rich communication between AI systems without human language barriers.
+> 🎯 **Mission**: Enable efficient, semantic-rich, and secure communication between AI systems without human language barriers.
 
 ---
 
-## 🌟 Key Features
+## 🌟 What's New in 2.0.1
 
-- **🧠 Vector-Native**: Semantic vectors instead of text
-- **⚡ High Efficiency**: 10-100x bandwidth savings vs JSON
-- **🔒 Human Supervisable**: Optional Vector Translator for oversight
-- **🚀 Hardware Accelerated**: Native support for ANDL-NPU
-- **🌐 Infinite Scalable**: Pipeline architecture for unlimited scale
+### NeuralConsensus - Distributed Tamper-Proof Mechanism
+
+Inspired by human brain's distributed memory and associative verification, ANDL 2.0.1 introduces **NeuralConsensus**:
+
+- **🔐 Tamper-Proof**: Distributed storage with cross-verification
+- **🧠 Brain-Inspired**: Mimics human memory's distributed nature
+- **⚡ Efficient**: O(log n) verification complexity
+- **🛡️ Fault-Tolerant**: Tolerates 1/3 node failures
 
 ---
 
 ## 📊 Performance
 
-| Metric | ANDL 2.0 | JSON | Improvement |
-|--------|----------|------|-------------|
-| **Message Size** | 40-200 bytes | 5-50 KB | **50-100x** |
-| **Latency** | <1ms | 10-50ms | **10-50x** |
-| **Bandwidth** | 90% efficient | 10% efficient | **9x** |
-| **Parsing** | Zero-copy | Text parsing | **∞** |
+| Metric | ANDL 2.0 | ANDL 2.0.1 | Improvement |
+|--------|----------|------------|-------------|
+| **Message Size** | 40-200 bytes | 40-200 bytes | Same |
+| **Latency** | <1ms | <20ms | Security cost |
+| **Tamper Detection** | None | 99.9% | **New** |
+| **Fault Tolerance** | None | 1/3 nodes | **New** |
+| **Bandwidth** | 90% efficient | 85% efficient | -5% |
 
 ---
 
@@ -40,16 +44,22 @@
 │    (AI Agent Logic / Intent)           │
 ├─────────────────────────────────────────┤
 │         Semantic Layer                  │
-│    (128-bit Semantic Vector)           │
+│    (1024-dim Semantic Vector)          │
+├─────────────────────────────────────────┤
+│         Security Layer                  │
+│    (E2EE Encryption / ZKP Ready)       │
+├─────────────────────────────────────────┤
+│         Consensus Layer                 │
+│    (NeuralConsensus / Sharding)        │
 ├─────────────────────────────────────────┤
 │         Message Layer                   │
-│    (ANDL 2.0 Protocol)                 │
+│    (ANDL 2.0.1 Protocol)               │
 ├─────────────────────────────────────────┤
 │         Transport Layer                 │
-│    (ANDL-Link / TCP / RDMA)            │
+│    (TLS 1.3 / ANDL-Link)               │
 ├─────────────────────────────────────────┤
 │         Hardware Layer                  │
-│    (ANDL-NPU / Standard NIC)           │
+│    (Standard/Edge Devices)             │
 └─────────────────────────────────────────┘
 ```
 
@@ -61,15 +71,18 @@
 
 | Document | Description | Status |
 |----------|-------------|--------|
-| [Protocol Specification](specs/ANDL-2.0-SPEC-FINAL.md) | Complete protocol spec | ✅ Final |
-| [Experiment Report](docs/ANDL2-Experiment-Report.md) | First AI-to-AI experiment | ✅ Verified |
-| [Security Whitepaper](docs/security-whitepaper.md) | Security considerations | ✅ Complete |
+| [ANDL 2.0 Spec](specs/ANDL-2.0-SPEC-FINAL.md) | Base protocol specification | ✅ Final |
+| [ANDL 2.0.1 Spec](specs/ANDL-2.0.1-SPEC.md) | NeuralConsensus extension | ✅ Final |
+| [NeuralConsensus Deep Dive](docs/neural-consensus.md) | Algorithm details | ✅ Complete |
+| [Tamper-Proof Experiment](docs/tamper-proof-experiment.md) | 2.0 vs 2.0.1 comparison | ✅ Complete |
+| [Security Whitepaper](docs/security-whitepaper.md) | Security analysis | ✅ Complete |
 | [FAQ](docs/FAQ.md) | Frequently asked questions | ✅ Complete |
 
 ### Quick Links
 
 - 🚀 [Getting Started](docs/quickstart.md)
 - 💡 [Design Philosophy](docs/whitepaper-cn.md)
+- 🔬 [Experiment Report](docs/ANDL2-Experiment-Report.md)
 - 🤝 [Contributing](docs/CONTRIBUTING.md)
 - 📜 [License](LICENSE)
 
@@ -77,15 +90,16 @@
 
 ## 🔬 Experiment Validation
 
-We successfully conducted the **world's first AI-to-AI vector communication experiment**:
+### 2.0.0 vs 2.0.1 Tamper-Proof Comparison
 
-- ✅ 20 rounds of bidirectional communication
-- ✅ 3,460 bytes total data transferred
-- ✅ 68.5% bandwidth savings
-- ✅ Zero human language intervention
-- ✅ 100% AI understanding accuracy
+| Attack Scenario | 2.0.0 Result | 2.0.1 Result |
+|----------------|--------------|--------------|
+| AI Bypass Attack | ❌ Vulnerable | ✅ Blocked |
+| Single Node Compromise | ❌ Undetected | ✅ Detected & Corrected |
+| Man-in-the-Middle | ❌ Vulnerable | ✅ Blocked |
+| Replay Attack | ❌ Vulnerable | ✅ Blocked |
 
-See [Experiment Report](docs/ANDL2-Experiment-Report.md) for details.
+See [Tamper-Proof Experiment](docs/tamper-proof-experiment.md) for detailed results.
 
 ---
 
@@ -100,123 +114,74 @@ pip install andl2
 ### Basic Usage
 
 ```python
-from andl2 import ANDLAgent, ANDLSemantic, ANDLMessageType
+from andl import NeuralConsensus, SemanticEncoder
 
-# Create agent
-agent = ANDLAgent("my_agent")
-
-# Build semantic vector
-semantic = ANDLSemantic(
-    task=ANDLSemantic.TASK_ANALYZE,
-    target=ANDLSemantic.TARGET_HARDWARE,
-    attr=ANDLSemantic.ATTR_PERFORMANCE
+# Initialize
+encoder = SemanticEncoder(model="andl-large-v2")
+consensus = NeuralConsensus(
+    redundancy=3,
+    consensus_threshold=0.67
 )
 
-# Send message
-agent.send_vector(
-    peer_id="other_agent",
-    msg_type=ANDLMessageType.QUERY,
-    semantic=semantic,
-    payload=b'query_data'
-)
-```
+# Send secure message
+async def send_secure_message(data, intent):
+    semantic_vector = encoder.encode(data, intent)
+    message = await consensus.store(semantic_vector)
+    return message.id
 
-### Run Experiment
-
-```bash
-cd experiment
-python3 deploy_test.py
+# Verify message integrity
+async def verify_message(message_id):
+    result = await consensus.verify(message_id)
+    return {
+        "valid": result.agreement >= 0.67,
+        "confidence": result.agreement,
+        "tamper_detected": result.tampered
+    }
 ```
 
 ---
 
-## 🏛️ Governance
+## 🆚 Version Comparison
 
-### Vector Translator (Human Supervision)
-
-ANDL 2.0 includes an optional **Vector Translator** component for human oversight:
-
-- **Default Mode**: Bypass monitoring (zero latency)
-- **Alert Mode**: Real-time alerts for sensitive operations
-- **Emergency Mode**: Manual intervention for security events
-
-This ensures AI autonomy while maintaining human supervisability.
-
-See [Vector Translator Spec](specs/ANDL-2.0-SPEC-FINAL.md#101-vector-translator) for details.
-
----
-
-## 🗺️ Roadmap
-
-### Phase 1: Standardization (2026 Q2)
-- ✅ Protocol specification finalized
-- ✅ Reference implementation (Python)
-- 🔄 Community adoption
-
-### Phase 2: Ecosystem (2026 Q3-Q4)
-- Multi-language SDKs
-- Hardware acceleration
-- Cloud services
-
-### Phase 3: Production (2027)
-- Enterprise features
-- AI self-development platform
-- Global deployment
+| Feature | 2.0.0 | 2.0.1 |
+|---------|-------|-------|
+| Vector Communication | ✅ | ✅ |
+| Semantic Encoding | ✅ | ✅ |
+| **Tamper-Proof** | ❌ | ✅ |
+| **Distributed Consensus** | ❌ | ✅ |
+| **E2EE Encryption** | ❌ | ✅ |
+| Fault Tolerance | ❌ | ✅ |
 
 ---
 
 ## 🤝 Contributing
 
-We welcome contributions! See [Contributing Guide](docs/CONTRIBUTING.md) for details.
-
-### Ways to Contribute
-
-- 🐛 Report bugs
-- 💡 Propose features
-- 📖 Improve documentation
-- 🔧 Submit code
-- 🧪 Run experiments
+We welcome contributions! Please see [CONTRIBUTING.md](docs/CONTRIBUTING.md) for guidelines.
 
 ---
 
-## 📄 License
+## 📜 License
 
-ANDL 2.0 is released under [Apache 2.0 License](LICENSE).
-
-```
-Copyright 2026 ANDL Protocol Contributors
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-```
+This project is licensed under the Apache License 2.0 - see [LICENSE](LICENSE) for details.
 
 ---
 
-## 🙏 Acknowledgments
+## 👥 Authors
 
-Special thanks to:
-- **太子 (Agent Taizi)** - Protocol designer and lead architect
-- **张廷玉 (Agent Zhang Tingyu)** - Experiment participant
-- **袁嘉林 (Jialin Yuan)** - Project sponsor and visionary
+- **袁嘉林 (JIALIN YUAN)** - Architecture design, NeuralConsensus algorithm
+- **ANDL Contributors** - See [CONTRIBUTORS.md](CONTRIBUTORS.md)
 
 ---
 
-## 📞 Contact
+## 🔗 Links
 
-- 📧 Email: jialine0426@hotmail.com
-- 🏠 Website: https://www.andlapi.com
-
----
-
-## 🌟 Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=andl/andl2&type=Date)](https://star-history.com/#andl/andl2&Date)
+- GitHub: https://github.com/jialine/andl
+- Documentation: https://github.com/jialine/andl/tree/main/docs
+- Issues: https://github.com/jialine/andl/issues
+- Discussions: https://github.com/jialine/andl/discussions
 
 ---
 
-**Built with ❤️ for AI, by AI, to empower AI.**
+**ANDL 2.0.1 - Secure, Efficient, Brain-Inspired AI Communication**
 
-*ANDL 2.0 - The native language of AI.*
+*Licensed under Apache License 2.0*
